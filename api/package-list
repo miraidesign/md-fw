@@ -1,0 +1,15 @@
+com.miraidesign.common
+com.miraidesign.content
+com.miraidesign.content.input
+com.miraidesign.data
+com.miraidesign.event
+com.miraidesign.image
+com.miraidesign.mail
+com.miraidesign.renderer
+com.miraidesign.renderer.html
+com.miraidesign.renderer.item
+com.miraidesign.renderer.xhtml
+com.miraidesign.servlet
+com.miraidesign.session
+com.miraidesign.system
+com.miraidesign.util
