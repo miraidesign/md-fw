@@ -3,7 +3,7 @@
 
   <property name="source" value="./src" />
   <property name="compile" value="./classes"/>
-  <property name="common.lib" value="../lib" />
+  <property name="lib" value="./lib" />
 
   <target name="directory">
     <mkdir dir="${compile}"/>
@@ -20,7 +20,7 @@
            deprecation="off">
            
            <classpath>
-              <fileset dir="${common.lib}">
+              <fileset dir="${lib}">
                 <include name="*.jar" />
               </fileset>
            </classpath>
