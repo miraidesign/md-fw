@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------
 //    AbstractServlet.java
 //             (abstract)
-//             Copyright (c) MiraiDesign 2010-13 All Rights Reserved.
+//             Copyright (c) MiraiDesign 2010-19 All Rights Reserved.
 //------------------------------------------------------------------------
 //      
 //------------------------------------------------------------------------
@@ -981,6 +981,7 @@ if (debugPath2) System.out.println("ThreadID:"+Thread.currentThread().getName())
             // ディレクトリマッピング
             HashVector<CharArray,CharArrayQueue> hashDir  = SystemManager.ini.getKeyTable("[DirectoryMapping]");
             HashVector<CharArray,CharArrayQueue> hashPage = SystemManager.ini.getKeyTable("[PageMapping]");
+            
             CharToken token = CharToken.pop();
             CharToken token1 = CharToken.pop();
             CharToken token2 = CharToken.pop();
@@ -991,10 +992,15 @@ if (debugPath2) System.out.println("ThreadID:"+Thread.currentThread().getName())
             //CharArray _path = CharArray.pop(requestURI);
             //String _sz = _path.URLDecode("UTF-8");  // これが固定になっているのが問題
             //token.set(_sz,"/");
+            
+            CharArray context = new CharArray();
             for (int j = 0; j < token.size(); j++) {    // スラッシュ分割
                 CharArray dir_path = token.get(j);
+                if (j > 1) context.add("/");
+                if (j > 0) context.add(dir_path);
+//System.out.println("---GetContext["+pathInfo+"]["+j+"]"+dir_path+" context:"+context);
                 int idx = dir_path.indexOf('=');
-                if (idx >= 0) {
+                if (idx >= 0) { // パラメータディレクトリ
                     idx = dir_path.indexOf('=', idx+1);
                     if (idx < 0) {
                         CharArray dir = dir_path;
@@ -1048,7 +1054,7 @@ if (debugPath2) System.out.println("ThreadID:"+Thread.currentThread().getName())
                         continue;
                     }
                 }
-            
+                
                 token1.set(token.get(j),"&");
                 for (int i = 0; i < token1.size(); i++) {    // ＆分割
                    //System.out.println("["+i+"/"+token.size()+"]"+token.get(i));
@@ -1099,13 +1105,54 @@ if (debugPath2) System.out.println("ThreadID:"+Thread.currentThread().getName())
                             }
                         }
                     }
+                } // next i
+                
+                if (j > 1 && context.length() > 0) {    // 拡張マッピング対応
+                    int page_id = -1;
+                    if (mm != null) page_id = mm.getSiteMapping().getPageID(context);
+//System.out.println("  --checkContext["+context+"]->"+page_id);
+                    CharArrayQueue queue = (CharArrayQueue)hashPage.get(context);
+                    if (page_id > 0) {
+                        //ページマッピング
+                        if (debugPath) System.out.println(count+"(*PageMapping)/"+context+" -> "+page_id);
+                        String szPage = ""+page_id;
+                        if (display) System.out.println(count+"["+SystemConst.pageIDKey+"]"+szPage);
+                        data.put(SystemConst.pageIDKey,new String[] { szPage });
+                    } else if (queue != null && queue.size() > 0) {
+                        //ページマッピング
+                        if (debugPath) System.out.println(count+"(*PageMapping)/"+context+" -> "+queue.peek());
+                        String szPage = queue.peek().toString();
+                        if (display) System.out.println(count+"["+SystemConst.pageIDKey+"]"+szPage);
+                        data.put(SystemConst.pageIDKey,new String[] { szPage });
+                    } else {
+                        CharArray chDir = null;
+                        if (mm != null) chDir = mm.getSiteMapping().getDirectoryMap(context);
+                        queue = (CharArrayQueue)hashDir.get(context);
+                        if (chDir != null || (queue != null && queue.size() > 0)) {
+                            //ディレクトリマッピング
+                            if (chDir == null) chDir = queue.peek();
+                            if (debugPath) System.out.println(count+"(*DirectoryMapping)/"+context+" -> "+chDir);
+                            token3.set(chDir,"=");
+                            if (token3.size()==2) {
+                                CharArray key   = token3.get(0).trim();
+                                CharArray param = token3.get(1).trim();
+                                if (display) System.out.println(count+"["+key+"]"+param);
+                                if (key.length() > 0) {
+                                    data.put(key.toString(),new String[] {param.toString()});
+                                }
+                            } else {
+                                 //String key = dir_path.substring(0,idx1)
+                            }
+                        }
+                    }
                 }
             }
             CharToken.push(token3);
             CharToken.push(token2);
             CharToken.push(token1);
             CharToken.push(token);
-        }
+        } // next j
+        
         if (display) {
             System.out.println(((count>0)? count+"|":"")+
                 "▲ ContextParameter end====================================");

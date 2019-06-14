@@ -7,7 +7,6 @@
 package com.miraidesign.util;
 
 
-
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.SoftReference;
 import java.nio.ByteBuffer;
@@ -29,6 +28,7 @@ import sun.nio.cs.ArrayEncoder;
 /**
  * Utility class for string encoding and decoding.
  */
+@SuppressWarnings("all")
 public class StringCoding {
 
     private StringCoding() { }
