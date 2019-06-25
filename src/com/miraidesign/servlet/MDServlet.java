@@ -233,7 +233,8 @@ if (debug) System.out.println("システム終了要求:"+destroyCount+" "+this)
                 log = ServletLog.getInstance();
             }
             Hashtable<String,UploadInfo> hashFileData = new Hashtable<String,UploadInfo>();  // ファイル情報  CharArray:name ByteArray:データ
-            Hashtable<String,String[]> hashParameter = getParameters(request,count,hashFileData);
+            UploadJson jsonBody = new UploadJson();
+            Hashtable<String,String[]> hashParameter = getParameters(request,count,hashFileData,jsonBody);
             int siteChCode  = CharArray.getInt(getParameter(SystemConst.siteKey,hashParameter));
             int sessionID = 0;
             String sessionStr1 = getParameter(SystemConst.sessionIDKey[0],hashParameter);
@@ -309,10 +310,10 @@ if (debugCookie) System.out.println(count+"|★readCookie:"+readCookie+"  writeC
                     }
                 }
             }
+            
             frame   = getParameter(SystemConst.frameKey,hashParameter); 
             total = new CharArray((hashParameter.get("$$$Parameters$$$"))[0]);
             paramKey = new IntObject(total.hashCode());
-            
             String szUA = "";
             for (Enumeration e = request.getHeaderNames(); e.hasMoreElements();) {
                String key = (String)e.nextElement();
@@ -527,7 +528,8 @@ if (debugLock) System.out.println(count+"|setLocked("+paramKey+",true)");
                             sessionObject.pageID    = pageID;
                             sessionObject.hashParameter = hashParameter;
                             
-                            sessionObject.hashFileData = hashFileData;  // 2014-06-04
+                            sessionObject.hashFileData = hashFileData;
+                            sessionObject.jsonBody = jsonBody;
                             sessionObject.mdServlet = this;
                             if (pcID <= 0) {
                                 pcID = sessionID;
@@ -800,6 +802,7 @@ if (debugLock) System.out.println(count+"|setLocked("+paramKey+",true)★");
                             sessionObject.pageID    = pageID;
                             sessionObject.hashParameter = hashParameter;
                             sessionObject.hashFileData = hashFileData;
+                            sessionObject.jsonBody = jsonBody;
                             sessionObject.mdServlet = this;
                             if (siteChCode > 0) {
                                 int orgCode = sessionObject.getSiteChannelCode();

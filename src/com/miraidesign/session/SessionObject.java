@@ -33,6 +33,7 @@ import com.miraidesign.renderer.item.ItemData;
 import com.miraidesign.servlet.MDServlet;
 import com.miraidesign.servlet.PageServlet;
 import com.miraidesign.servlet.UploadInfo;
+import com.miraidesign.servlet.UploadJson;
 import com.miraidesign.system.ModuleManager;
 import com.miraidesign.system.SiteManager;
 import com.miraidesign.system.SystemManager;
@@ -600,6 +601,8 @@ if (debugPaging) System.out.println("  ★hashURI put:"+key+"="+data);
 
     public   Hashtable<CharArray,CharArray> hashHeader;
     public   Hashtable<String, UploadInfo> hashFileData;
+    public   UploadJson jsonBody;
+    public   UploadJson getJson() { return jsonBody;}
     public   MDServlet mdServlet;
 
     public   int       mixedID;
@@ -2651,6 +2654,7 @@ if (debugSession) {
 
         hashHeader = null;
         hashFileData = null;
+        jsonBody = null;
         mdServlet = null;
         mixedID = pageID = 0;
         userAgent = null;
@@ -2790,6 +2794,7 @@ if (debugSession) {
 
         hashHeader = null;
         hashFileData = null;
+        jsonBody = null;
         mdServlet = null;
         mixedID = pageID = 0;
     }

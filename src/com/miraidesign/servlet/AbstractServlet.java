@@ -53,10 +53,10 @@ public abstract class AbstractServlet extends HttpServlet
 {
     /*static*/ protected boolean debug = (SystemConst.debug && true);       // 
     /*static*/ protected boolean debugUA = (SystemConst.debug && false);     // 
-    /*static*/ protected boolean debugHeader = (SystemConst.debug && false);  // false
-    /*static*/ protected boolean debugMulti = (SystemConst.debug && false); // false
+    /*static*/ protected boolean debugHeader = (SystemConst.debug && true);  // false
+    /*static*/ protected boolean debugMulti = (SystemConst.debug && true); // false
     /*static*/ protected boolean debugPath  = (SystemConst.debug && true); 
-    /*static*/ protected boolean debugPath2  = (SystemConst.debug && false); // false
+    /*static*/ protected boolean debugPath2  = (SystemConst.debug && true); // false
     /*static*/ protected boolean debugUTF  = (SystemConst.debug && false);
     /*static*/ protected boolean debugContext  = (SystemConst.debug && false);   // false
 
@@ -376,13 +376,21 @@ public abstract class AbstractServlet extends HttpServlet
     }
     
     protected Hashtable<String,String[]> getParameters(HttpServletRequest request,int count,
-                        Hashtable<String,UploadInfo> hashFileData) throws IOException {
+                        Hashtable<String,UploadInfo> hashFileData, UploadJson jsonBody) throws IOException {
         String method = request.getMethod();
         String type = request.getContentType();
+        //System.out.println("★★contentType:"+type);
         int size = request.getContentLength();
-        if (method == null || type == null || !method.equals("POST") || !type.startsWith("multipart/form-data")) return getParameters(request,count);
+        if (method == null || type == null || !method.equals("POST") 
+                || (!type.startsWith("multipart/form-data")
+                && !type.startsWith("application/json"))
+           ) return getParameters(request,count);
 
-
+        
+        if (type.startsWith("application/json")) {
+            return getParametersJSON(request,count,jsonBody);
+        }
+        
         // 以降multiform処理
         if (debug) {
             System.out.println(((count>0)? count+"|":"")+"▼ MultipartParameter get===========================:"+size);
@@ -595,6 +603,44 @@ public abstract class AbstractServlet extends HttpServlet
         
         if (debug) {
             System.out.println(((count>0)? count+"|":"")+"▲ MultipartParameter end===========================");
+        }
+        
+        return hash;
+    }
+    protected Hashtable<String,String[]> getParametersJSON(HttpServletRequest request,int count,
+                        UploadJson jsonBody) throws IOException {
+        String method = request.getMethod();
+        String type = request.getContentType();
+
+        int size = request.getContentLength();
+        if (debug) {
+            System.out.println(((count>0)? count+"|":"")+"▼ JSON get===========================:"+size);
+        }
+        Hashtable<String,String[]> hash = new Hashtable<String,String[]>();
+        if (SystemManager.convertContextPath > 0) { 
+            getContextParameters(request, hash, count);
+        }
+
+        //if (debugMulti) println(session, count, "★charCode"+charCode+" session:"+session);
+        ServletInputStream in = request.getInputStream();
+        do {
+            try {
+                jsonBody.setStream(in);
+                jsonBody.read();
+                
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                break;
+            }
+        } while (false);
+        in.close();
+        
+        System.out.println(jsonBody);
+        
+        hash.put("$$$Parameters$$$",new String[] {""});
+        
+        if (debug) {
+            System.out.println(((count>0)? count+"|":"")+"▲ JSON end===========================");
         }
         
         return hash;

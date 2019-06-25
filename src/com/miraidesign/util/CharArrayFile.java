@@ -120,6 +120,8 @@ public class CharArrayFile extends CharArray {
     public void setAppendMode(boolean mode, int size) {
         appendMode = mode; iAppendMax = size;
     }
+    public void setSocket(Socket socket) { this.socket = socket;}
+    public void setStream(InputStream stream) { this.stream = stream;}
 
     public CharArrayFile clear() {
         super.clear();
