@@ -53,10 +53,10 @@ public abstract class AbstractServlet extends HttpServlet
 {
     /*static*/ protected boolean debug = (SystemConst.debug && true);       // 
     /*static*/ protected boolean debugUA = (SystemConst.debug && false);     // 
-    /*static*/ protected boolean debugHeader = (SystemConst.debug && true);  // false
-    /*static*/ protected boolean debugMulti = (SystemConst.debug && true); // false
+    /*static*/ protected boolean debugHeader = (SystemConst.debug && false);  // false
+    /*static*/ protected boolean debugMulti = (SystemConst.debug && false); // false
     /*static*/ protected boolean debugPath  = (SystemConst.debug && true); 
-    /*static*/ protected boolean debugPath2  = (SystemConst.debug && true); // false
+    /*static*/ protected boolean debugPath2  = (SystemConst.debug && false); // false
     /*static*/ protected boolean debugUTF  = (SystemConst.debug && false);
     /*static*/ protected boolean debugContext  = (SystemConst.debug && false);   // false
 
@@ -635,7 +635,7 @@ public abstract class AbstractServlet extends HttpServlet
         } while (false);
         in.close();
         
-        System.out.println(jsonBody);
+        if (debugMulti) System.out.println(jsonBody);
         
         hash.put("$$$Parameters$$$",new String[] {""});
         
