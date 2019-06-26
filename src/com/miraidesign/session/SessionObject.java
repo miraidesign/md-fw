@@ -3692,66 +3692,24 @@ if (debugTimer) System.out.println("◆SessionObject#replaceTemplate Lapse:"+Uti
         return mm.isAppendAuthID();
     }
 
-
-    //public void println(String str) {
-    //    System.out.println(((count>0)? count+"|":"")+str);
-    //}
-    //public void println(CharArray ch) {
-    //    System.out.println(((count>0)? count+"|":"")+ch);
-    //}
     /** count,ユーザー名付きメッセージを出力する */
-    public void print(String strs) {
+    public void print(CharSequence strs) {
         System.out.print(message(this, strs));
     }
-    public void print(CharArray strs) {
-        System.out.print(message(this, strs));
-    }
-    public void println(String strs) {
-        System.out.println(message(this, strs));
-    }
-    public void println(CharArray strs) {
+    public void println(CharSequence strs) {
         System.out.println(message(this, strs));
     }
     /** count,ユーザー名付きメッセージを取得する
         session がnullの時はメッセージのみ出力
     */
-    static public void print(SessionObject session, String strs) {
+    static public void print(SessionObject session, CharSequence strs) {
         System.out.print(message(session, strs));
     }
-    static public void print(SessionObject session, CharArray strs) {
-        System.out.print(message(session, strs));
-    }
-    static public void println(SessionObject session, String strs) {
+    static public void println(SessionObject session, CharSequence strs) {
         System.out.println(message(session, strs));
     }
-    static public void println(SessionObject session, CharArray strs) {
-        System.out.println(message(session, strs));
-    }
-    
     /** count,ユーザー名付きメッセージを取得する */
-    static public String message(SessionObject session, String strs) {
-        CharArray ch = CharArray.pop();
-        if (session != null) {
-            if (session.count > 0) {
-                ch.format(session.count);
-                ch.add('|');
-            }
-            if (session.userID != null && session.userID.length() > 0) {
-                ch.add('(');
-                ch.add(session.userID);
-                ch.add(')');
-            } else if (session.userName != null && session.userName.length() > 0) {
-                ch.add('(');
-                ch.add(session.userName);
-                ch.add(')');
-            }
-        }
-        ch.add(strs);
-        String str = ch.toString();
-        CharArray.push(ch);
-        return str;
-    }
-    static public String message(SessionObject session, CharArray strs) {
+    static public String message(SessionObject session, CharSequence strs) {
         CharArray ch = CharArray.pop();
         if (session != null) {
             if (session.count > 0) {
