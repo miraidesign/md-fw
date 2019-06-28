@@ -325,22 +325,15 @@ System.out.println("PageServlet#changeTemplate ERROR");
 
     //-----
     /** ガイダンス情報を保管する */
-    protected StringItem guidanceItem = new StringItem(true);
+    protected StringItem guidanceItem = new StringItem("",true);
 
     /** ガイダンス情報を設定する */
-    public void setGuidance(CharArray ch) { guidanceItem.setText(ch);}
-    public void setGuidance(String str)   { guidanceItem.setText(str);}
-    public void setGuidance(CharArray ch, int sessionID) {
-        guidanceItem.setText(ch, sessionID);
+    public void setGuidance(CharSequence cs) { guidanceItem.setText(cs);}
+    public void setGuidance(CharSequence cs, int sessionID) {
+        guidanceItem.setText(cs, sessionID);
     }
-    public void setGuidance(String str, int sessionID) {
-        guidanceItem.setText(str, sessionID);
-    }
-    public void setGuidance(CharArray ch, SessionObject session) {
-        guidanceItem.setText(ch, session.getSessionID());
-    }
-    public void setGuidance(String str, SessionObject session) {
-        guidanceItem.setText(str, session.getSessionID());
+    public void setGuidance(CharSequence cs, SessionObject session) {
+        guidanceItem.setText(cs, session.getSessionID());
     }
     /** ガイダンス情報を取得する */
     public CharArray getGuidance() { return guidanceItem.getText();}

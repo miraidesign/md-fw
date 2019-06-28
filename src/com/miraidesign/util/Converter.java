@@ -15,8 +15,9 @@ package com.miraidesign.util;
   コンバータインターフェース
 **/
 public interface Converter {
-    public QueueElement add(CharArray str);
     public QueueElement add(String str);
+    public QueueElement add(CharArray ca);
+    public QueueElement add(CharSequence cs);
     
     public CharArray convert(CharArray str);
     public String convert(String str);
