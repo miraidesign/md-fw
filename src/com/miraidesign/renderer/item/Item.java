@@ -76,6 +76,7 @@ public abstract class Item implements ItemConstant {
         nameHash.put(new IntObject(ELEMENT),"ELEMENT");
         nameHash.put(new IntObject(PARAMETER),"PARAMETER");
         nameHash.put(new IntObject(HASH),"HASH");
+        nameHash.put(new IntObject(LIST),"LIST");
         nameHash.put(new IntObject(EVENT),"EVENT");
     }
 
@@ -481,6 +482,9 @@ System.out.println("☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
                 // BUTTON
                 // IMAGE
                 
+            case LIST:
+                item = new ListItem((ListItem)from);
+                break;
             case LIST_BOX:
                 item = new ListBoxItem((ListBoxItem)from);
                 break;

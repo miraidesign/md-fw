@@ -1912,6 +1912,7 @@ public class CharArray implements Serializable, CharSequence {
        ex)  &lt; →  &amp;lt;   &amp;  → &amp;amp;<br>
        オリジナルは変更せず、新しいCharArrayで返します
     */
+
     static public CharArray replaceTag(CharArray org) { // 
         CharArray ch = new CharArray();
         if (org != null && !org.isNull()) {
@@ -1933,7 +1934,8 @@ public class CharArray implements Serializable, CharSequence {
         } else ch.set((String)null);
         return ch;
     }
-    
+
+/*    
     static public CharArray replaceTag(String str) {
         CharArray ch = new CharArray();
         if (str != null) {
@@ -1955,6 +1957,30 @@ public class CharArray implements Serializable, CharSequence {
         } else ch.set((String)null);
         return ch;
     }
+*/    
+    static public CharArray replaceTag(CharSequence sc) {
+        CharArray ch = new CharArray();
+        if (sc != null) {
+            for (int i = 0; i < sc.length(); i++) {
+                char c = sc.charAt(i);
+                switch (c) {
+                    case '<':  ch.add("&lt;");   break;
+                    case '>':  ch.add("&gt;");   break;
+                    case '&':  ch.add("&amp;");  break;
+                    case '\"': ch.add("&quot;"); break;
+                    case '\'': ch.add("&#039;"); break;
+                    case '\u00a9'  : ch.add("&copy;");  break; // (C)
+                    case '\u00ae'  : ch.add("&reg;");   break; // (R)
+                    case '\u2122'  : ch.add("&trade;");  break; // TM
+                    case '\u20ac'  : ch.add("&euro;");  break; // ユーロ
+                    default:   ch.add(c);      break;
+                }
+            }
+        } else ch.set((String)null);
+        return ch;
+    }
+    
+    
 /* 利用するときに復活
     static public String replaceTag(char c) {
         switch (c) {

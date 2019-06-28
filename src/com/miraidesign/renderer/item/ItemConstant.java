@@ -65,6 +65,7 @@ public interface ItemConstant {
     public final static int ELEMENT     = 502;
     public final static int PARAMETER   = 503;
     public final static int HASH        = 504;  // May 2012
+    public final static int LIST        = 505; 
     public final static int EVENT       = 510; 
     
     

@@ -36,6 +36,7 @@ public class QueueElement extends CharArrayQueue {
     /** 要素の追加 
         @param value 追加する要素
     */
+    /*
     public QueueElement add(String value) {
         if (convert && value != null) enqueue(CharArray.replaceTag(value));
         else         enqueue(value);
@@ -55,6 +56,20 @@ public class QueueElement extends CharArrayQueue {
         return this;
     }
     public QueueElement add(CharArray[] values) {
+        if (values != null) {
+            for (int i = 0; i < values.length; i++) {
+                if (convert) enqueue(CharArray.replaceTag(values[i]));
+                else         enqueue(values[i]);
+            }
+        }
+        return this;
+    }
+    */
+    public QueueElement add(CharSequence value) {
+        enqueue((convert && value != null)? CharArray.replaceTag(value) : new CharArray(value));
+        return this;
+    }
+    public QueueElement add(CharSequence[] values) {
         if (values != null) {
             for (int i = 0; i < values.length; i++) {
                 if (convert) enqueue(CharArray.replaceTag(values[i]));

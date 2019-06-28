@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------
 // @(#)StringData.java
 //                 
-//              Copyright (c) MiraiDesign 2010 All Rights Reserved. 
+//              Copyright (c) MiraiDesign 2010-19 All Rights Reserved. 
 //------------------------------------------------------------------------
 
 package com.miraidesign.renderer.item;
@@ -46,39 +46,29 @@ public class StringData extends ItemData {
         this.sessionObject = session;
         copy(from);
     }
-    public StringData(String text) {
+    public StringData(CharSequence text) {
         setText(text);
     }
-    public StringData(CharArray text) {
-        setText(text);
-    }
-    
     //---------------------------------------------------------------------
     // setter
     //---------------------------------------------------------------------
     public void setValue(String[] strs) {string.set(strs[0]);}
     /** @deprecated */
-    public void setValue(String str) {string.set(str);}
-    /** @deprecated */
-    public void setValue(CharArray ch) {string.set(ch);}
+    public void setValue(CharSequence cs) {string.set(cs);}
     
     /** 文字列の設定 */
-    public void setText(String str) {string.set(str);}
-    public void setText(CharArray ch) {string.set(ch);}
+    public void setText(CharSequence cs) {string.set(cs);}
     /** 文字列の追加 */
-    public void addText(String str) {string.add(str);}
-    public void addText(CharArray ch) {string.add(ch);}
+    public void addText(CharSequence cs) {string.add(cs);}
     /** 数値設定 */
     public void setInt(int num) {string.clear(); string.format(num);}
     /** 数値設定 */
     public void setLong(long num) {string.clear(); string.format(num);}
     
     /** フォント色の設定 */
-    public void setColor(String str) {color.set(str);}
-    public void setColor(CharArray ch) {color.set(ch);}
+    public void setColor(CharSequence cs) {color.set(cs);}
     /** フォントサイズの設定 */
-    public void setSize(String str) {size.set(str);}
-    public void setSize(CharArray ch) {size.set(ch);}
+    public void setSize(CharSequence cs) {size.set(cs);}
     public void setSize(int i) {size.reset(); size.format(i);}
     /** bold 設定*/
     public void setBold(boolean b) { bold = b;}

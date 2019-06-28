@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------
 // @(#)StringItem.java
 //                 
-//             Copyright (c) MiraiDesign 2010 All Rights Reserved. 
+//             Copyright (c) MiraiDesign 2010-19 All Rights Reserved. 
 //------------------------------------------------------------------------
 //
 package com.miraidesign.renderer.item;
@@ -28,52 +28,22 @@ public class StringItem extends Item {
         itemData.setItem(this);
     }
     /** StringItem の生成
-        @param str  表示文字列
+        @param ca  表示文字列
     */
-    public StringItem(String str) { 
+    public StringItem(CharSequence ca) { 
         super();
         init();
-        itemData = new StringData(str);
+        itemData = new StringData(ca);
         itemData.setItem(this);
     }
     /** StringItem の生成
+        @param ca  表示文字列
         @param cloneable clonaable
     */
-    public StringItem(boolean cloneable) { 
+    public StringItem(CharSequence ca, boolean cloneable) { 
         super();
         init();
-        itemData = new StringData();
-        itemData.setItem(this);
-        setCloneable(cloneable);
-    }
-    /** StringItem の生成
-        @param str  表示文字列
-        @param cloneable clonaable
-    */
-    public StringItem(String str,boolean cloneable) { 
-        super();
-        init();
-        itemData = new StringData(str);
-        itemData.setItem(this);
-        setCloneable(cloneable);
-    }
-    /** StringItem の生成
-        @param ch  表示文字列
-    */
-    public StringItem(CharArray ch) { 
-        super();
-        init();
-        itemData = new StringData(ch);
-        itemData.setItem(this);
-    }
-    /** StringItem の生成
-        @param ch  表示文字列
-        @param cloneable clonaable
-    */
-    public StringItem(CharArray ch, boolean cloneable) { 
-        super();
-        init();
-        itemData = new StringData(ch);
+        itemData = new StringData(ca);
         itemData.setItem(this);
         setCloneable(cloneable);
     }
@@ -107,26 +77,18 @@ public class StringItem extends Item {
     }
 **/ 
     /** 文字列の設定 */
-    public void setText(CharArray ch) {
-        ((StringData)itemData).setText(ch);
+    public void setText(CharSequence cs) {
+        ((StringData)itemData).setText(cs);
     }
-    public void setText(CharArray ch, int sessionID) {
-        ((StringData)getItemData(sessionID)).setText(ch);
+    public void setText(CharSequence cs, int sessionID) {
+        ((StringData)getItemData(sessionID)).setText(cs);
     }
-    public void setText(CharArray ch, SessionObject session) {
-        ((StringData)getItemData(session)).setText(ch);
+    public void setText(CharSequence cs, SessionObject session) {
+        ((StringData)getItemData(session)).setText(cs);
     }
-    /** 文字列の設定 */
-    public void setText(String str) {
-        ((StringData)itemData).setText(str);
+    public void setText(SessionObject session, CharSequence cs) {
+        ((StringData)getItemData(session)).setText(cs);
     }
-    public void setText(String str, int sessionID) {
-        ((StringData)getItemData(sessionID)).setText(str);
-    }
-    public void setText(String str, SessionObject session) {
-        ((StringData)getItemData(session)).setText(str);
-    }
-    
     /** 数値設定 */
     public void setInt(int num) {
         ((StringData)itemData).setInt(num);
@@ -149,67 +111,41 @@ public class StringItem extends Item {
         ((StringData)getItemData(session)).setLong(num);
     }
     
+    /** 文字列の追加 */
+    public void addText(CharSequence cs) {
+        ((StringData)itemData).addText(cs);
+    }
+    public void addText(CharSequence cs, int sessionID) {
+        ((StringData)getItemData(sessionID)).addText(cs);
+    }
+    public void addText(CharSequence cs, SessionObject session) {
+        ((StringData)getItemData(session)).addText(cs);
+    }
+    public void addText(SessionObject session, CharSequence cs) {
+        ((StringData)getItemData(session)).addText(cs);
+    }
     
-    /** 文字列の追加 */
-    public void addText(CharArray ch) {
-        ((StringData)itemData).addText(ch);
-    }
-    public void addText(CharArray ch, int sessionID) {
-        ((StringData)getItemData(sessionID)).addText(ch);
-    }
-    public void addText(CharArray ch, SessionObject session) {
-        ((StringData)getItemData(session)).addText(ch);
-    }
-    /** 文字列の追加 */
-    public void addText(String str) {
-        ((StringData)itemData).addText(str);
-    }
-    public void addText(String str, int sessionID) {
-        ((StringData)getItemData(sessionID)).addText(str);
-    }
-    public void addText(String str, SessionObject session) {
-        ((StringData)getItemData(session)).addText(str);
-    }
     /** フォント色の設定 */
-    public void setColor(CharArray ch) {
-        ((StringData)itemData).setColor(ch);
+    public void setColor(CharSequence cs) {
+        ((StringData)itemData).setColor(cs);
     }
-    public void setColor(CharArray ch, int sessionID) {
-        ((StringData)getItemData(sessionID)).setColor(ch);
+    public void setColor(CharSequence cs, int sessionID) {
+        ((StringData)getItemData(sessionID)).setColor(cs);
     }
-    public void setColor(CharArray ch, SessionObject session) {
-        ((StringData)getItemData(session)).setColor(ch);
-    }
-    /** フォント色の設定 */
-    public void setColor(String str) {
-        ((StringData)itemData).setColor(str);
-    }
-    public void setColor(String str, int sessionID) {
-        ((StringData)getItemData(sessionID)).setColor(str);
-    }
-    public void setColor(String str, SessionObject session) {
-        ((StringData)getItemData(session)).setColor(str);
+    public void setColor(CharSequence cs, SessionObject session) {
+        ((StringData)getItemData(session)).setColor(cs);
     }
     /** フォントサイズの設定 */
-    public void setSize(CharArray ch) {
-        ((StringData)itemData).setSize(ch);
+    public void setSize(CharSequence cs) {
+        ((StringData)itemData).setSize(cs);
     }
-    public void setSize(CharArray ch, int sessionID) {
-        ((StringData)getItemData(sessionID)).setSize(ch);
+    public void setSize(CharSequence cs, int sessionID) {
+        ((StringData)getItemData(sessionID)).setSize(cs);
     }
-    public void setSize(CharArray ch, SessionObject session) {
-        ((StringData)getItemData(session)).setSize(ch);
+    public void setSize(CharSequence cs, SessionObject session) {
+        ((StringData)getItemData(session)).setSize(cs);
     }
-    /** フォントサイズの設定 */
-    public void setSize(String str) {
-        ((StringData)itemData).setSize(str);
-    }
-    public void setSize(String str, int sessionID) {
-        ((StringData)getItemData(sessionID)).setSize(str);
-    }
-    public void setSize(String str, SessionObject session) {
-        ((StringData)getItemData(session)).setSize(str);
-    }
+    
     /** フォントサイズの設定 */
     public void setSize(int size) {
         ((StringData)itemData).setSize(size);

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------
 //    Version.java
 //                 バージョン管理ファイル
-//     Copyright (c) Mirai Design Institute 2010-2017 All Rights Reserved. 
+//     Copyright (c) Mirai Design Institute 2010-2019 All Rights Reserved. 
 //------------------------------------------------------------------------
 
 package com.miraidesign.common;
@@ -12,9 +12,9 @@ import com.miraidesign.util.CharArrayQueue;
     MD Framework のバージョンを保管します。<br>
 */
 public class Version {
-    static public int    version        =   1025;
-    static public String version_string = "1.025";
-    static public String version_date   = "2019-06-26 17:30 (JST)";
+    static public int    version        =   1026;
+    static public String version_string = "1.026";
+    static public String version_date   = "2019-06-28 13:30 (JST)";
     //-------------------------------------------------------
     static public int getVersion() { return version;}
     static public String getVersionString() { return version_string;}
