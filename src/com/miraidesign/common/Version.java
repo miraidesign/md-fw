@@ -12,15 +12,15 @@ import com.miraidesign.util.CharArrayQueue;
     MD Framework のバージョンを保管します。<br>
 */
 public class Version {
-    static public int    version        =   1027;
-    static public String version_string = "1.027";
-    static public String version_date   = "2019-07-12 17:30 (JST)";
+    static public int    version        =   1028;
+    static public String version_string = "1.028";
+    static public String version_date   = "2019-11-19 10:40 (JST)";
     //-------------------------------------------------------
     static public int getVersion() { return version;}
     static public String getVersionString() { return version_string;}
     static public String getVersionDate() { return version_date;}
 
-    static public String szVersion = "md-fw ver.1.026 2019-07-12 17:30 (JST)";
+    static public String szVersion = "md-fw ver."+version_string+" "+version_date;
 
 static {
     System.out.println(szVersion);

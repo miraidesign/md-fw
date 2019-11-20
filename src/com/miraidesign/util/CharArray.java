@@ -2971,6 +2971,31 @@ public class CharArray implements Serializable, CharSequence {
     }
     /**
      * 全て半角数字か？
+     *  @param c 有効とする一文字
+     *  @param max cの許される個数
+     *  @return  全て半角数字なら true
+     */
+    public boolean isDigit(char c, int max) {
+        if (length == 0) return false;
+        boolean rsts = true;
+        int count = 0;
+        for (int i = 0; i < length; i++) {
+            if ('0' <= chars[i] && chars[i] <= '9') {
+                //rsts = true;
+            } else if (chars[i] == c) {
+                if (++count > max) {
+                    rsts = false;
+                    break;
+                }
+            } else {
+                rsts = false;
+                break;
+            }
+        }
+        return rsts;
+    }
+    /**
+     * 全て半角数字か？
      *  @param str 有効とする文字集合
      *  @return  全て半角数字なら true
      */
