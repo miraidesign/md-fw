@@ -500,6 +500,14 @@ public class CharToken extends CharArrayQueue {
     public CharArray get(int index) {
         return peek(index);
     }
+    /**
+        指定分割位置(0-)の文字列を取り出す
+        @param index 指定分割位置
+        @return 取得文字列
+    */
+    public String getString(int index) {
+        return ""+peek(index);
+    }
     //----------
     /**
         指定分割位置(0-)の文字列をint型に変換して取り出す

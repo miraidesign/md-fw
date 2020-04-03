@@ -42,7 +42,7 @@ public class QueueFile extends CharArrayQueue {
     protected Socket socket;
     protected InputStream stream;
     
-    protected String szDefaultEncoding = "MS932";       //SJIS"; MS932
+    protected String szDefaultEncoding = "UTF8";    //"MS932";       //SJIS"; MS932
     public String getEncoding() { return szDefaultEncoding;}
     public String getFileEncoding() { return szDefaultEncoding;}
     public void setEncoding(String s) {
