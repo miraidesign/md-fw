@@ -16,7 +16,7 @@ package com.miraidesign.util;       //
  */
 
 public class Crypt58 {
-
+    static private boolean debug = false;
     private static char[] chStr = { // 62進数変換用テーブル
       // 0   1   2   3   4   5   6   7   8   9
         'a','N','9','s','D','B','i','W','I','2',
@@ -58,9 +58,9 @@ public class Crypt58 {
      *  エンコード
      *  @param no 
      */
-    static public CharArray encode(int no) { return encode((long)no,58); }
     static public CharArray encode(long no) { return encode(no,58); }
     static public synchronized CharArray encode(long no,int radix) {
+        if (debug) System.out.println(" encode("+no+")");
         int j = 0;
         long val = no;
         val += ADD_VALUE;
@@ -68,6 +68,12 @@ public class Crypt58 {
             int i = 0;
             do {
                 chBuf[i++] = chStr[(int)(val % radix)];
+                if (debug) {
+                    int n = (int)(val % radix);
+                    char c = chStr[n];
+                    System.out.println(" val["+val+"]encode["+c+"]"+n);
+                }
+                
                 val /= radix;
             } while (val > 0);
             while (i > 0) chars[j++] = chBuf[--i];  // 反転コピー
