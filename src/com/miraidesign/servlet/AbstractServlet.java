@@ -400,7 +400,11 @@ public abstract class AbstractServlet extends HttpServlet
             getContextParameters(request, hash, count);
         }
 
-        boolean isUTF = false;
+        boolean isUTF = true;
+        //String _enc = request.getCharacterEncoding();
+        //if (debug) System.out.println("encoding:"+_enc);
+        //if (_enc != null &&  _enc.equals("UTF-8")) isUTF = true;
+        
         //String ua = request.getHeader("user-agent");
         //if (ua.indexOf("UP.Browser") >= 0) {
         //    isUTF = (ua.indexOf("UP.Link") < 0) && request.getMethod().equals("POST");
@@ -660,14 +664,14 @@ public abstract class AbstractServlet extends HttpServlet
        if (display) {
             System.out.println(((count>0)? count+"|":"")+"▼ Parameter get==");
        }
-        boolean isUTF = false;
-        
+       
+        boolean isUTF = true;
         int carrier = -1;
 
         String _enc = request.getCharacterEncoding();
-        if (ua != null) {
+        //if (ua != null) {
             if (_enc != null &&  _enc.equals("UTF-8")) isUTF = true;
-        }
+        //}
         
         //boolean convert = (carrier >= 0 && SystemManager.convertEmoji);
         
