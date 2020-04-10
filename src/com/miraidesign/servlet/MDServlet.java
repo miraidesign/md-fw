@@ -1642,7 +1642,7 @@ if (debugLang) System.out.println("@COUNTRY="+cc);
                 ch.replace("@SERVER_DATE", (date > 9) ? ""+ date : "0"+date);
             }
         }
-        String charCode="MS932";
+        String charCode="UTF8"; //"MS932";
         
         String s = session.getCharCode();
         if (s.length()> 0) charCode = s;

@@ -275,18 +275,20 @@ public class ModuleServlet extends Module
         @param filename デフォルトのファイル名
     **/
     public boolean writeCSV(SessionObject session, CharArray ch, CharArray filename) {
-        return writeCSV(session, ch, filename.toString(), "Shift_JIS", "MS932", "inline");
+        //return writeCSV(session, ch, filename.toString(), "Shift_JIS", "MS932", "inline");
+        return writeCSV(session, ch, filename.toString(), "UTF-8", "UTF8", "inline");
     }
     public boolean writeCSV(SessionObject session, CharArray ch, String filename) {
-        return writeCSV(session, ch, filename, "Shift_JIS", "MS932", "inline");
+        //return writeCSV(session, ch, filename, "Shift_JIS", "MS932", "inline");
+        return writeCSV(session, ch, filename, "UTF-8", "UTF8", "inline");
     }
     /**
         CSVファイルの出力
         @param session  セッション
         @param ch       出力内容
         @param filename デフォルトのファイル名
-        @param szCharset charset デフォルト(Shift_JIS)
-        @param szEncode  encode  デフォルト(MS932)
+        @param szCharset charset デフォルト(UTF-8)
+        @param szEncode  encode  デフォルト(UTF8)
         @param mode      [inline] attachment
     **/
     public boolean writeCSV(SessionObject session, CharArray ch, CharArray filename, String szCharset, String szEncode, String mode) {
@@ -295,8 +297,8 @@ public class ModuleServlet extends Module
     public boolean writeCSV(SessionObject session, CharArray ch, String filename, String szCharset, String szEncode , String mode) {
         boolean rsts = false;
         try {
-            if (szCharset == null || szCharset.length()==0) szCharset = "Shift_JIS";
-            if (szEncode == null || szEncode.length() == 0) szEncode  = "MS932";
+            if (szCharset == null || szCharset.length()==0) szCharset = "UTF-8";    //"Shift_JIS";
+            if (szEncode == null || szEncode.length() == 0) szEncode  = "UTF8";     //"MS932";
             
             if (ch.indexOf("\r") < 0 && System.getProperty("line.separator").equals("\n")) {
                 ch.replace("\n","\r\n");
@@ -323,18 +325,20 @@ public class ModuleServlet extends Module
         @param filename デフォルトのファイル名
     **/
     public boolean writeTSV(SessionObject session, CharArray ch, CharArray filename) {
-        return writeTSV(session, ch, filename.toString(), "Shift_JIS", "MS932", "inline");
+        //return writeTSV(session, ch, filename.toString(), "Shift_JIS", "MS932", "inline");
+        return writeTSV(session, ch, filename.toString(), "UTF-9", "UTF8", "inline");
     }
     public boolean writeTSV(SessionObject session, CharArray ch, String filename) {
-        return writeTSV(session, ch, filename, "Shift_JIS", "MS932", "inline");
+        //return writeTSV(session, ch, filename, "Shift_JIS", "MS932", "inline");
+        return writeTSV(session, ch, filename, "UTF-8", "UTF8", "inline");
     }
     /**
         TSVファイルの出力
         @param session  セッション
         @param ch       出力内容
         @param filename デフォルトのファイル名
-        @param szCharset charset デフォルト(Shift_JIS)
-        @param szEncode  encode  デフォルト(MS932)
+        @param szCharset charset デフォルト(UTF-8)
+        @param szEncode  encode  デフォルト(UTF8)
         @param mode      [inline] attachment
     **/
     public boolean writeTSV(SessionObject session, CharArray ch, CharArray filename, String szCharset, String szEncode, String mode) {
@@ -343,8 +347,8 @@ public class ModuleServlet extends Module
     public boolean writeTSV(SessionObject session, CharArray ch, String filename, String szCharset, String szEncode , String mode) {
         boolean rsts = false;
         try {
-            if (szCharset == null || szCharset.length()==0) szCharset = "Shift_JIS";
-            if (szEncode == null || szEncode.length() == 0) szEncode  = "MS932";
+            if (szCharset == null || szCharset.length()==0) szCharset = "UTF-8";    //"Shift_JIS";
+            if (szEncode == null || szEncode.length() == 0) szEncode  = "UTF8"; //"MS932";
 
             if (ch.indexOf("\r") < 0 && System.getProperty("line.separator").equals("\n")) {
                 ch.replace("\n","\r\n");

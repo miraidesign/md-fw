@@ -675,9 +675,9 @@ public abstract class AbstractServlet extends HttpServlet
         
         //boolean convert = (carrier >= 0 && SystemManager.convertEmoji);
         
-        if (display) {
+        //if (display) {
             if (isUTF) request.setCharacterEncoding("UTF-8");   //8859_1");   //"MS932");   // 
-        }
+        //}
         
         CharArray total = new CharArray();
 

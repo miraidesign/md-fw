@@ -44,7 +44,7 @@ public class CharArrayFile extends CharArray {
     protected Socket socket;
     protected InputStream stream;
     
-    protected String szDefaultEncoding = "MS932";       //SJIS";
+    protected String szDefaultEncoding = "UTF8";    //"MS932";       //SJIS";
     public void setEncoding(String s) {
         if (s != null) {
             szDefaultEncoding = s;
