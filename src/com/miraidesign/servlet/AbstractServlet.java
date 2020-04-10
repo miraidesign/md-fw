@@ -669,9 +669,9 @@ public abstract class AbstractServlet extends HttpServlet
         int carrier = -1;
 
         String _enc = request.getCharacterEncoding();
-        //if (ua != null) {
+        if (ua != null) {
             if (_enc != null &&  _enc.equals("UTF-8")) isUTF = true;
-        //}
+        }
         
         //boolean convert = (carrier >= 0 && SystemManager.convertEmoji);
         
