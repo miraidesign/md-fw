@@ -508,7 +508,7 @@ public  class Format {
                 char unit = str.chars[nextIndex++];
                 
                 if (nextIndex >= str.length || str.chars[nextIndex] != ':') {
-                    System.out.println("Format: パースエラー");
+                    System.out.println("Format: パースエラー"+ch);
                     ch.add('%');
                     ch.add(num);
                     ch.add(unit);
@@ -528,7 +528,7 @@ public  class Format {
                     }
                 }
                 if (_key == null) {
-                    System.out.println("Format: パースエラー(key not found!!);");
+                    System.out.println("Format: パースエラー(key not found!!)"+ch);
                     ch.add('%');
                     ch.add(num);
                     ch.add(unit);

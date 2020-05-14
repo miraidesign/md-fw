@@ -27,6 +27,14 @@ public class StringItem extends Item {
         itemData = new StringData();
         itemData.setItem(this);
     }
+    /** StringItem の生成 */
+    public StringItem(boolean cloneable) { 
+        super();
+        init();
+        itemData = new StringData();
+        itemData.setItem(this);
+        setCloneable(cloneable);
+    }
     /** StringItem の生成
         @param ca  表示文字列
     */
