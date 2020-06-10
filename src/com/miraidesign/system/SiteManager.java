@@ -534,11 +534,14 @@ System.out.println("SiteManager.setSite() Module 登録");
                                             if (p != null) {
                                                 p.setName(pageKey);
                                                 ((PageServlet)p).setMimeType(mimeType); // 2014-03-17
+//System.out.println("filename:"+SystemManager.resourceDirectory+fileName);
                                                 sts = ((PageServlet)p).setParser(SystemManager.resourceDirectory+fileName);
                                                 if (param != null && param.trim().length() > 0) {
                                                     ((PageServlet)p).setNodeParameter(param);
                                                 }
                                             }
+                                        } else {
+                                            System.out.println("ERROR: moduleKey("+moduleKey+")でmoduleが取得できません!!");
                                         }
 
                                         if (debug) System.out.println(sts ? "OK" : "ERROR!");
