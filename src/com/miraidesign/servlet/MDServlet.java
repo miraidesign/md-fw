@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------
 // @(#)MDServlet.java
 //              MD サーブレット
-//              Copyright (c) MIraiDesign 2010-17 All Rights Reserved. 
+//              Copyright (c) MIraiDesign 2010-20 All Rights Reserved. 
 //------------------------------------------------------------------------
 
 package com.miraidesign.servlet;
@@ -74,12 +74,12 @@ public class MDServlet extends AbstractServlet {
     static private boolean debugHtml = (SystemConst.debug && false);  // htmlソース表示
     static private boolean debugSessionID = (SystemConst.debug && false);  // デバッグ表示
     static private boolean debugCheckbox = (SystemConst.debug && false);  // デバッグ表示
-    static private boolean debugCookie = (SystemConst.debug && false);  // デバッグ表示
+    static private boolean debugCookie = (SystemConst.debug && true);  // デバッグ表示
     static private boolean debugChar = (SystemConst.debug && false);  // デバッグ表示
     static private boolean debugSetValue = (SystemConst.debug && false);  // デバッグ表示
     static private boolean debugReplace = (SystemConst.debug && false);   // 置換内容表示
 
-    static private boolean debugSession = (SystemConst.debug && false);  // デバッグ表示
+    static private boolean debugSession = (SystemConst.debug && true);  // デバッグ表示
     static private boolean debugSessionTimeout = (SystemConst.debug && true);  // デバッグ表示
     
     static private boolean debugComplex = (SystemConst.debug && false);  // デバッグ表示  false
@@ -234,7 +234,10 @@ if (debug) System.out.println("システム終了要求:"+destroyCount+" "+this)
             }
             Hashtable<String,UploadInfo> hashFileData = new Hashtable<String,UploadInfo>();  // ファイル情報  CharArray:name ByteArray:データ
             UploadJson jsonBody = new UploadJson();
-            Hashtable<String,String[]> hashParameter = getParameters(request,count,hashFileData,jsonBody);
+            Hashtable<String,String[]>     hashParameter = getParameters(request,count,hashFileData,jsonBody);
+            Hashtable<CharArray,CharArray> hashHeader    = getHeaders(request, hashParameter, count);
+            
+            
             int siteChCode  = CharArray.getInt(getParameter(SystemConst.siteKey,hashParameter));
             int sessionID = 0;
             String sessionStr1 = getParameter(SystemConst.sessionIDKey[0],hashParameter);
@@ -405,7 +408,7 @@ if (debugCookie) System.out.println(count+"|★readCookie:"+readCookie+"  writeC
                                     pcid = sessionID;
                                 }
                                 sessionObject = SessionManager.load(sessionID, siteChCode, 
-                                        getHeaders(request,hashParameter,count), request,pcID,".save", count);
+                                        hashHeader, request,pcID,".save", count);  //@@ getHeaders 1
                                 if (sessionObject != null) {
                                     long passTime = System.currentTimeMillis() - sessionObject.getLastTime();
                                     if (debug2) {
@@ -434,14 +437,14 @@ if (debugCookie) System.out.println(count+"|★readCookie:"+readCookie+"  writeC
                             }
                         }
                     }
-                       if (sessionObject == null) {
+                    if (sessionObject == null) {
                         if (debugSession) System.out.println(count+"|◆新規にセッションを生成します");
                         // 新たにセッションオブジェクトを設定
                         if (multiSiteSessionID) {
-                            sessionObject = SessionManager.getInitSessionObject2(siteChCode, getHeaders(request,hashParameter, count),request,cartID, count);
+                            sessionObject = SessionManager.getInitSessionObject2(siteChCode, hashHeader,request,cartID, count);  //@@ getHeaders
                             sessionObject.cookieID = cartID;
                         } else {
-                            sessionObject = SessionManager.getInitSessionObject(siteChCode, getHeaders(request,hashParameter,count),request,pcID, count);
+                            sessionObject = SessionManager.getInitSessionObject(siteChCode, hashHeader,request,pcID, count);   //@@ getHeaders
                             sessionObject.cookieID = pcID;
                         }
                         if (sessionObject != null) {  // 2010-04-19 追加
@@ -575,11 +578,11 @@ if (debugSession && sessionObject.isPC()) System.out.println(count+"!!alert!! pc
                             sessionObject.count = count;
                             
                             if (pageID > 0) { // ページが指定されている
-                                doFirst(request,response,sessionObject, count);
+                                doFirst(request,response,sessionObject, count, hashHeader, hashParameter);
                             } else {
                                 if (debug2) System.out.println(count+"|doFirst 表示ページが指定されていません:site:"+siteChCode+
                                        ":"+sessionObject.getSiteCode());
-                                doFirst(request,response,sessionObject, count);
+                                doFirst(request,response,sessionObject, count, hashHeader, hashParameter);
                             }
                         }
                     }
@@ -611,7 +614,7 @@ if (debugSession && sessionObject.isPC()) System.out.println(count+"!!alert!! pc
                                 int pcid = pcID;
                                 if (pcid == 0) pcid = sessionID;
                                 
-                                sessionObject = SessionManager.load(sessionID, siteChCode, getHeaders(request,hashParameter,count), request, pcid, ".ss", count);
+                                sessionObject = SessionManager.load(sessionID, siteChCode, hashHeader, request, pcid, ".ss", count);  //@@ getHeaders
                                 if (sessionObject != null) {
                                     sessionObject.setRequest(request,count);
                                     SessionManager.renameFile(sessionID);   // *.ss -> *.rr
@@ -634,7 +637,7 @@ if (debugSession && sessionObject.isPC()) System.out.println(count+"!!alert!! pc
                                 }
                                 if (debug2) System.out.println(count+"|ファイルが存在しました pcid:"+pcid+" siteCh:"+siteChCode);
 
-                                sessionObject = SessionManager.load(sessionID, siteChCode, getHeaders(request,hashParameter,count),request, pcid,".save",count);
+                                sessionObject = SessionManager.load(sessionID, siteChCode, hashHeader,request, pcid,".save",count);  //@@ getHeaders
                                 if (sessionObject != null) {
                                     if (siteChCode == 0) siteChCode = sessionObject.getSiteChannelCode();
                                     
@@ -703,7 +706,7 @@ if (debugSession && sessionObject.isPC()) System.out.println(count+"!!alert!! pc
                         return;
                     } else {  // sessionObject != null
                         sessionObject.clearAllBuffer();
-                        sessionObject.setHeader(getHeaders(request,hashParameter));
+                        sessionObject.setHeader(hashHeader);     //@@ getHeaders
                         
                         mm = sessionObject.getModuleManager();
                         if (sessionObject.locked) {
@@ -861,10 +864,10 @@ if (debugLock) System.out.println(count+"|setLocked("+paramKey+",true)★");
                             }
                             sessionObject.count = count;
                             if (pageID > 0) {    // 表示ページが指定されている
-                                doNext(request, response, sessionObject, count);
+                                doNext(request, response, sessionObject, count, hashHeader, hashParameter);
                             } else {
                                 if (debug2) System.out.println(count+"|doNext 表示ページが指定されていません");
-                                doNext(request, response, sessionObject, count);
+                                doNext(request, response, sessionObject, count, hashHeader, hashParameter);
                             }
                         }
                     }
@@ -960,7 +963,8 @@ if (debugLock) System.out.println(count+"|今はよばれない");
         GCManager.execute();
     }
 
-    public void doFirst(HttpServletRequest request, HttpServletResponse response, SessionObject session, int count) {
+    public void doFirst(HttpServletRequest request, HttpServletResponse response, SessionObject session, int count,
+                        Hashtable<CharArray,CharArray> hashHeader, Hashtable<String,String[]> hashParameter) {
         int moduleID = session.pageID / 1000;
         int pageID   = session.pageID % 1000;
         ModuleManager moduleManager = SiteManager.get(session.getSiteChannelCode());
@@ -983,7 +987,11 @@ if (debugLock) System.out.println(count+"|今はよばれない");
                     System.out.println(count+"|ページが見つかりません M:"+moduleID+"=null P:"+pageID);
                 } else {
                     if (debug2) System.out.println(count+"|ページID:"+page.getPageID());
-                    execute(request, response, page,session,count);
+                    if (page.forward(request, response, count, hashHeader, hashParameter)) {     //@@ 2020 
+                        SessionManager.remove(session);
+                    } else {
+                        execute(request, response, page,session,count);
+                    }
                 }
             } else {
                 if (debug) System.out.println(count+"|Default Module がありません");
@@ -1001,13 +1009,17 @@ if (debugLock) System.out.println(count+"|今はよばれない");
             if (page == null) {
                 System.out.println(count+"|ページが見つかりません M:"+moduleID+" P:"+pageID);
             } else {
-                execute(request, response, page,session, count);
-                //outStream = execute(page,session, count);
+                if (page.forward(request, response, count, hashHeader, hashParameter)) { //@@ 2020
+                    SessionManager.remove(session);
+                } else {
+                    execute(request, response, page,session, count);  //@@
+                }
             }
         }
     }
     
-    public void doNext(HttpServletRequest request, HttpServletResponse response, SessionObject session, int count) {
+    public void doNext(HttpServletRequest request, HttpServletResponse response, SessionObject session, int count,
+                        Hashtable<CharArray,CharArray> hashHeader, Hashtable<String,String[]> hashParameter) {
         int moduleID = session.pageID / 1000;
         int pageID   = session.pageID % 1000;
         
@@ -1031,7 +1043,12 @@ if (debugLock) System.out.println(count+"|今はよばれない");
                     System.out.println(count+"|ページが見つかりません M:"+moduleID+"=null P:"+pageID);
                 } else {
                     if (debug2) System.out.println(count+"|ページID:"+page.getPageID());
-                    execute(request, response, page,session,count);
+                    
+                    if (page.forward(request, response, count, hashHeader, hashParameter)) {
+                        SessionManager.remove(session);
+                    } else {
+                        execute(request, response, page,session,count);
+                    }
                 }
             }
         } else {
@@ -1047,7 +1064,11 @@ if (debugLock) System.out.println(count+"|今はよばれない");
             if (page == null) {
                 System.out.println(count+"|ページが見つかりません(Next) M:"+moduleID+" P:"+pageID);
             } else {
-                execute(request, response, page,session, count);
+                if (page.forward(request, response, count, hashHeader, hashParameter)) {
+                    SessionManager.remove(session);
+                } else {
+                    execute(request, response, page,session, count);  // @@
+                }
             }
         }
     }
@@ -1057,6 +1078,7 @@ if (debugLock) System.out.println(count+"|今はよばれない");
         @param session セッションオブジェクト
     */
     private void execute(HttpServletRequest request, HttpServletResponse response, PageServlet page, SessionObject session, int count) {
+    
         int sessionID = session.getSessionID();
         //OutputStream outStream = null;
         
@@ -1077,6 +1099,7 @@ if (debugLock) System.out.println(count+"|今はよばれない");
             sendRedirect("SS_NOT_FOUND",response, mm, count);
             return;
         }
+        
         // url-DB マッピング
         session.setDefaultConnection("");
         String requestURL = request.getRequestURL().toString(); // for debug
@@ -1086,8 +1109,11 @@ if (debugLock) System.out.println(count+"|今はよばれない");
         }
         session.previousForwardPage = session.forwardPage;
         session.forwardPage = page;
-        execute(request, response, page.forward(session), session, count);
+        execute(request, response, page.forward(session), session, count);      //@@// 現在forward を読んでいるのはここのみ
     }
+    
+    
+    
     private void execute(HttpServletRequest request, HttpServletResponse response, ObjectQueue queue, SessionObject session, int count ) {
         if (queue == null || queue.size() == 0) {
             if (debug2) System.out.println(count+"|MDServlet: 表示ページはありません queue:"+(queue !=null));
@@ -1347,11 +1373,11 @@ if (debugComplex) System.out.println("ページ:"+page.getModule().getName()+"."
             session.setItemRenderer(orgRenderer);
            
         } else {  // not Complex
-           if (session.isMobile() && session.userAgent != null && session.userAgent.is3G()) {
-                session.setLanguage("XHTML");
-                session.setRenderer("XHTML");
-                session.setItemRenderer(com.miraidesign.renderer.xhtml.XhtmlRenderer.getInstance());
-            }
+            //if (session.isMobile() && session.userAgent != null && session.userAgent.is3G()) {
+            //    session.setLanguage("XHTML");
+            //    session.setRenderer("XHTML");
+            //    session.setItemRenderer(com.miraidesign.renderer.xhtml.XhtmlRenderer.getInstance());
+            //}
             if (session.getRenderer().equals("HTML")) {
                 ContentParser parser = page0.getParser();
                 if (parser != null) {   // HTMLテンプレートが存在する場合

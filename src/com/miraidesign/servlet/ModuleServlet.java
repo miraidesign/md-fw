@@ -8,6 +8,7 @@ package com.miraidesign.servlet;
 
 import java.io.OutputStream;
 import java.util.Enumeration;
+import java.util.Hashtable;
 
 import com.miraidesign.common.SystemConst;
 import com.miraidesign.util.CharArray;
@@ -135,6 +136,12 @@ public class ModuleServlet extends Module
 //          pageServlet.analizeParameter(sessionObject);
 //      }
  // }
+    public String getParameter(Hashtable<String,String[]> hash, String key) {
+        String[] strs = null;
+        if (hash != null) strs = (String[])hash.get(key);
+        if (strs == null) return "";
+        return strs[0];
+    }
     
     //---------------------------------------------------------
     // ページ生成処理

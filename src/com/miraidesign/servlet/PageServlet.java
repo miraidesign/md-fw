@@ -9,10 +9,12 @@
 package com.miraidesign.servlet;
 
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Vector;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.miraidesign.common.SystemConst;
@@ -162,6 +164,13 @@ System.out.println("PageServlet#changeTemplate ERROR");
     }
     public HashParameter getParameter(SessionObject session, Object message) {
         return null;
+    }
+    // Utility
+    public String getParameter(Hashtable<String,String[]> hash, String key) {
+        String[] strs = null;
+        if (hash != null) strs = (String[])hash.get(key);
+        if (strs == null) return "";
+        return strs[0];
     }
 
     /**
@@ -417,7 +426,14 @@ if (debugPaging) System.out.print("setPagingURL("+url+")->"+this.pagingURL);
         必要に応じてオーバーライドする
     */
     public  void init() {};
-
+   
+    /**
+    
+    */
+    public boolean forward(HttpServletRequest request,HttpServletResponse response, int count,
+           Hashtable<CharArray,CharArray> hashHeader, Hashtable<String,String[]> hashParameter) {
+        return false;   // true にすると、forward(SessionObject) は呼ばれない
+    }
     /** リダイレクトページが存在する場合にオーバーライドする */
     public ObjectQueue forward(SessionObject session) {
         return forward_queue;

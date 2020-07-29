@@ -883,7 +883,7 @@ public abstract class AbstractServlet extends HttpServlet
     protected Hashtable<CharArray,CharArray> getHeaders(HttpServletRequest request,
                                   Hashtable hashParameter,
                                   int count) throws IOException {
-        Hashtable<CharArray,CharArray> data = new Hashtable<CharArray,CharArray>();
+        Hashtable<CharArray, CharArray> data = new Hashtable<CharArray,CharArray>();
         boolean display = false;    //debug && count >= 0 && !debugHeader;
         if (display) {
             System.out.println(((count>0)? count+"|":"")+

@@ -28,7 +28,7 @@
               </fileset>
            </classpath>
            <compilerarg value="-Xlint:unchecked" />
-           <!--compilerarg value="-Xlint:deprecation" /-->
+           <compilerarg value="-Xlint:deprecation" />
     </javac>
   </target>
 
