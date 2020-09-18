@@ -80,7 +80,7 @@ public class SessionObject implements DataReadWrite {
     static private boolean debugTimer = (SystemConst.debug && false);
     static private boolean debugSession = (SystemConst.debug && false);
     static private boolean debugParameter = (SystemConst.debug && true);
-    static private boolean debugLocked = (SystemConst.debug && false);   // false
+    static private boolean debugLocked = (SystemConst.debug && true);   // false    @@
     static private boolean debugPaging = (SystemConst.debug && false);
     static private boolean debugNamespace = (SystemConst.debug && false);
     static private boolean debugLang = (SystemConst.debug && false);    // false

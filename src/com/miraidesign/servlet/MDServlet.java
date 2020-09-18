@@ -68,7 +68,7 @@ import com.miraidesign.util.Validation;
 public class MDServlet extends AbstractServlet {
     static private boolean debug = (SystemConst.debug && true); //@@false);  // デバッグ表示
     static private boolean debug2 = (SystemConst.debug && false);  // デバッグ表示 false
-    static private boolean debugLock = (SystemConst.debug && false);  // デバッグ表示
+    static private boolean debugLock = (SystemConst.debug && true);  // デバッグ表示 false      @@
     static private boolean debugUpload = (SystemConst.debug && true);  // デバッグ表示
     static private boolean debugHeader = (SystemConst.debug && false);  // ヘッダデバッグ表示
     static private boolean debugHtml = (SystemConst.debug && false);  // htmlソース表示
