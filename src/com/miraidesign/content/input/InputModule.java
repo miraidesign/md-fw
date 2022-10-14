@@ -200,11 +200,24 @@ if (debug || debugDisp) System.out.println("▼▼▼▼▼getDisp() session:"+(
 if (debugPaging) System.out.println("★★★★★★★★★★★★★★");
             CharArray chPagingURL = CharArray.pop();;
             CharToken tokenURI = session.getDirectoryListFromURI();
+            String startKey = page.getStartKey();
             for (int i = 0; i < tokenURI.size(); i++) {
                 CharArray dir = tokenURI.get(i);
-                if (!dir.startsWith("tm=") && !dir.startsWith("start=") && dir.length()>0) {
-                    chPagingURL.add('/');
-                    chPagingURL.add(dir);
+                if (!dir.startsWith("tm=") && !dir.startsWith(startKey+"=") && dir.length()>0) {
+                    boolean add_dir = true;
+                    for (int j = 0; j < queue.size(); j++) {
+                        PageServlet _page = (PageServlet)queue.peek(j);
+                        if (_page != null) {
+                            if (dir.startsWith(_page.getStartKey()+"=")) {
+                                add_dir = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (add_dir) {
+                        chPagingURL.add('/');
+                        chPagingURL.add(dir);
+                    }
                 }
 if (debugPaging) System.out.println("["+(i+1)+"/"+tokenURI.size()+"]◎dir:"+dir+"  URL:"+chPagingURL);
             }
@@ -228,7 +241,7 @@ if (debugPaging) System.out.println("★★★★★★★★★★★★★★"
                     }
                     String org = _page.getPagingURL();   //@@// debug
 if (debugPaging) System.out.println("InputModule(1)");
-                    _page.setPagingURL(pagingURL); //@@// debug
+                    _page.setPagingURL(pagingURL,"(1)"); //@@// debug
                     
 if (debug) System.out.println("★InputModule draw i="+i+"("+namespaceQueue.peek(i)+")");
                     _page.makePage(session);             //@@// タイミングはここで大丈夫か？
@@ -257,7 +270,7 @@ if (debug) System.out.println("★InputModule draw i="+i+"("+namespaceQueue.peek
                         _page.draw(session); //  通常はオーバーライドのみ利用される
                     }
 if (debugPaging) System.out.println("InputModule(2)");
-                    _page.setPagingURL(org); //@@// debug
+                    _page.setPagingURL(org,"(2)"); //@@// debug
                 }
             }
             session.setDefaultNamespace(defaultNamespace);
@@ -291,14 +304,14 @@ if (debugPaging) System.out.println("max="+max);
             if (max > 0) {
                 int hashcode = page.hashCode();
                 session.setParameter(""+hashcode+"_size",""+max);
-                String _start = session.getParameter(""+hashcode+"_start");
+                String _start = session.getParameter(""+hashcode+"_"+page.getStartKey());
 
                 if (_start.length() == 0) {
                     com.miraidesign.data.DataAccessObject dao = session.getDAO(page);
                     if (dao.getTimeStamp() == 0) {
                         session.removeDAO(page);
                     }
-                    session.setParameter(""+hashcode+"_start",""+0);
+                    session.setParameter(""+hashcode+"_"+page.getStartKey(),""+0);
                 } else {    // start パラメータが存在する（キャッシュ利用）
                     // do nothing?
                 }

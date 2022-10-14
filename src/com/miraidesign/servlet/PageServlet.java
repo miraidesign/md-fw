@@ -68,8 +68,8 @@ import com.miraidesign.util.QueueTable;
 public abstract class PageServlet extends Page
                implements ItemEventListener, TableDataAccess {
 
-    static private boolean debug = (SystemConst.debug && false);  // デバッグ表示
-    static private boolean debugPaging = (SystemConst.debug && false);  // false
+    static private boolean debug = (SystemConst.debug && true);  // デバッグ表示 false
+    static private boolean debugPaging = (SystemConst.debug && true);  // false
     static private boolean debugRedirect = true;  // false
     static private boolean addTM = true;    // daoチェッカをつける
 
@@ -377,7 +377,10 @@ System.out.println("PageServlet#changeTemplate ERROR");
 
     /** ページ遷移の飛び先URLを設定する */
     public void setPagingURL(String url) {
-if (debugPaging) System.out.println("setPagingURL("+url+")");
+       setPagingURL(url,"");
+    }
+    public void setPagingURL(String url, String debug) {
+if (debugPaging) System.out.println(debug+"▼setPagingURL("+url+")");
         if (url == null || url.trim().length()== 0) {
             this.pagingURL = "";
         } else {
@@ -396,7 +399,7 @@ if (debugPaging) System.out.println("setPagingURL("+url+")");
             }
             this.pagingURL = url;
         }
-if (debugPaging) System.out.print("setPagingURL("+url+")->"+this.pagingURL);
+if (debugPaging) System.out.println(debug+"▲setPagingURL("+url+")->"+this.pagingURL);
     }
     /** ページ遷移の飛び先URLを設定する */
     public String getPagingURL() { return this.pagingURL;}
@@ -930,7 +933,7 @@ if (debugPaging) System.out.print("setPagingURL("+url+")->"+this.pagingURL);
             String str = null;
             int hash = CharArray.getInt(session.getParameter("page@hash")); // InputModuleからのみセットされている
             if (hash > 0 && hash == hashCode()) {    // CMSからの呼び出し時のみセットする
-                str = session.getParameter(""+hash+"_start");
+                str = session.getParameter(""+hash+"_"+startKey);
             }
             if (str == null || str.length()==0) {
                 if (startKey.length() > 0) {
@@ -990,6 +993,7 @@ if (debugPaging) System.out.print("setPagingURL("+url+")->"+this.pagingURL);
 
     String startKey = "start";   // 表示開始位置パラメータ
     public void setStartKey(String str) { startKey = str; }
+    public String getStartKey() { return startKey;}
 
     String tmKey = SystemConst.tmKey;
     public void setTmKey(String str) {
@@ -1013,7 +1017,7 @@ if (debugPaging) System.out.print("setPagingURL("+url+")->"+this.pagingURL);
         if (cache > 0 && cache == _hash) return true; // InputModuleでは１回しか呼ばない
 
         int _max = CharArray.getInt(session.getParameter(""+_hash+"_size"));     // CMS I/F
-        String szStart = (_max > 0) ? ""+_hash+"_start=" : startKey+"=";
+        String szStart = (_max > 0) ? ""+_hash+"_"+startKey+"=" : startKey+"=";
         
         if (startKey.length() > 0) szStart = startKey+"=";
         
@@ -1095,7 +1099,7 @@ if (debugPaging) tokenURI.dumpQueue("<A>");
                     for (int i = 0; i < tokenURI.size(); i++) {
                         CharArray dir = tokenURI.get(i);
                         if (dir.length() > 0 &&
-                            !dir.startsWith(_hash+"_tm=") && !dir.startsWith(_hash+"_start=") &&
+                            !dir.startsWith(_hash+"_tm=") && !dir.startsWith(_hash+"_"+startKey+"=") &&
                             !dir.startsWith("S=") &&                  // セッションをつけすぎないように
                             (chPagingURL.indexOf("/"+dir+"/") < 0) && // 同名URLをはじく
                             !chPagingURL.endsWith("/"+dir))           // 同名URLをはじく
@@ -1126,7 +1130,7 @@ if (debugPaging) System.out.println("★token("+(i+1)+"/"+tokenURI.size()+")☆d
                     CharArray.push(servletPath);
                     String sz = chPagingURL.toString();
                     CharArray.push(chPagingURL);
-                    setPagingURL(sz); 
+                    setPagingURL(sz,"-1-"); 
 if (debugPaging) System.out.println("★pagingURL1:"+sz);
                 } else if (addURI) {
                     CharArray chPagingURL = CharArray.pop();;
@@ -1162,7 +1166,7 @@ if (debugPaging) System.out.println("★dir:"+dir+"  URL:"+chPagingURL);
                     CharArray.push(servletPath);
                     String sz = chPagingURL.toString();
                     CharArray.push(chPagingURL);
-                    setPagingURL(sz);
+                    setPagingURL(sz,"-2-");
 if (debugPaging) System.out.println("★PagingURL:"+sz);
                 }
                 CharArray msg = ((ModuleServlet)getModule()).getMessage(session,"PrevPage");
@@ -1204,6 +1208,7 @@ if (debugPaging) System.out.println("★PagingURL:"+sz);
                 } else if (disp_max <= 1) {  // モバイル用 2010.06.24
                     _start = _end = current;
                 }
+if (debugPaging) System.out.println("★[A]"+ch);
                 if (_start > 1) {
                     int i = 1;
                     ch.add(szSpace);
@@ -1219,12 +1224,14 @@ if (debugPaging) System.out.println("★PagingURL:"+sz);
                         dd.add(anchor);
                         anchor.getTag(ch);       // DynamicData に addしてから取り出す事
                     }
+if (debugPaging) System.out.println("★[B]"+ch);
                     if (_start == 2) {
                         ch.add(szSpace); ch.add(szSeparatePage); ch.add(szSpace);
                     } else {
                         ch.add(szSpace); ch.add(szSeparatePage); ch.add('…'); ch.add(szSeparatePage); ch.add(szSpace);
                     }
                 }
+if (debugPaging) System.out.println("★[C]"+ch);
                 for (int i = _start; i <= _end; i++) {
                     if (i == _start && _start > 1) {
                     } else {
@@ -1235,7 +1242,9 @@ if (debugPaging) System.out.println("★PagingURL:"+sz);
                         ch.format(i);
                         ch.add("</b>");
                     } else {
+if (debugPaging) System.out.println("★["+i+"]"+ch);
                         AnchorStringData anchor = getAnchorStringData(szStart+(size*i-size)+((addTM && !session.isRobot()) ? "&"+tmKey+"="+tm : ""),""+i);
+if (debugPaging) System.out.println("★["+i+"]URL:"+anchor.getURL());
                         anchor.setVisible(false);   // モバイル画面で無条件に表示されるのを避けるため
                         dd.add(anchor);
                         anchor.getTag(ch);          // DynamicData に addしてから取り出す事
@@ -1255,6 +1264,7 @@ if (debugPaging) System.out.println("★PagingURL:"+sz);
                         ch.add("</b>");
                     } else {
                         AnchorStringData anchor = getAnchorStringData(szStart+(size*i-size)+((addTM && !session.isRobot()) ? "&"+tmKey+"="+tm : ""),""+i);
+if (debugPaging) System.out.println("★URL:"+anchor.getURL());
                         anchor.setVisible(false);   // モバイル画面で無条件に表示されるのを避けるため
                         dd.add(anchor);
                         anchor.getTag(ch);          // DynamicData に addしてから取り出す事
@@ -1264,6 +1274,7 @@ if (debugPaging) System.out.println("★PagingURL:"+sz);
                 ch.add(szSpace); ch.add(szSeparatePage); ch.add(szSpace);
                 if (nextFlag) {
                     AnchorStringData anchor = getAnchorStringData(szStart+(start+size)+((addTM && !session.isRobot()) ? "&"+tmKey+"="+tm : ""),szNextPage);
+if (debugPaging) System.out.println("★URL:"+anchor.getURL());
                     anchor.setAccessKey('#');
                     anchor.setVisible(false);   // モバイル画面で無条件に表示されるのを避けるため
                     dd.add(anchor);
@@ -1284,7 +1295,7 @@ if (debugPaging) System.out.println("  _page:"+ch);
                     session.setParameter(""+_hash+"_page",""+ch);
 if (debugPaging) System.out.println(" orgURL:"+orgURL);
 
-                    setPagingURL(orgURL);
+                    setPagingURL(orgURL,"-3-");
                 }
             }
         //}//

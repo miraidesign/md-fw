@@ -12,9 +12,9 @@ import com.miraidesign.util.CharArrayQueue;
     MD Framework のバージョンを保管します。<br>
 */
 public class Version {
-    static public int    version        =   1034;
-    static public String version_string = "1.034";
-    static public String version_date   = "2020-08-19 10:00 (JST)";
+    static public int    version        =   1035;
+    static public String version_string = "1.035";
+    static public String version_date   = "2022-10-15 00:19 (JST)";
     //-------------------------------------------------------
     static public int getVersion() { return version;}
     static public String getVersionString() { return version_string;}

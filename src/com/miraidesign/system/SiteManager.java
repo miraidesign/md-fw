@@ -75,6 +75,7 @@ public abstract class SiteManager {
     static public void load(IniFile ini, String encoding) {
         if (ini.isOK()) {
             CharArray filenames = ini.get("[Resource]","SiteData");
+System.out.println("★SiteManager load...."+filenames);
             filenames.convertProperty();
             CharToken token = CharToken.pop(filenames);
             for (int t = 0; t < token.size(); t++) {
