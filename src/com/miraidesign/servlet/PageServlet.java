@@ -68,8 +68,8 @@ import com.miraidesign.util.QueueTable;
 public abstract class PageServlet extends Page
                implements ItemEventListener, TableDataAccess {
 
-    static private boolean debug = (SystemConst.debug && true);  // デバッグ表示 false
-    static private boolean debugPaging = (SystemConst.debug && true);  // false
+    static private boolean debug = (SystemConst.debug && false);  // デバッグ表示 false
+    static private boolean debugPaging = (SystemConst.debug && false);  // false
     static private boolean debugRedirect = true;  // false
     static private boolean addTM = true;    // daoチェッカをつける
 
@@ -999,6 +999,7 @@ if (debugPaging) System.out.println(debug+"▲setPagingURL("+url+")->"+this.pagi
     public void setTmKey(String str) {
         tmKey=str;
     }
+    public String getTmKey() { return tmKey;}
 
     /** ページ表示、ボタン表示用のパラメータを設定する */
     public boolean setPageValue(boolean prevFlag, boolean nextFlag,

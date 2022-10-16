@@ -212,6 +212,10 @@ if (debugPaging) System.out.println("★★★★★★★★★★★★★★"
                                 add_dir = false;
                                 break;
                             }
+                            if (dir.startsWith(_page.getTmKey()+"=")) {
+                                add_dir = false;
+                                break;
+                            }
                         }
                     }
                     if (add_dir) {

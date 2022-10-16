@@ -177,11 +177,15 @@ public class DataAccessObject {
         @return true: キャッシュデータが存在する
     */
     public boolean cashEnabled(SessionObject session) {
+        return cashEnabled(session, null);
+    }
+    public boolean cashEnabled(SessionObject session, PageServlet page) {
         boolean sts = false;
         if (cursor_end &&                                   // データが取得完了で
             table != null && table.getTable() != null) {    // そのテーブルが存在する
             String tm = null;
-            if (session != null) tm = session.getParameter(tmKey);
+            String _tmKey = (page != null) ? page.getTmKey() : tmKey;
+            if (session != null) tm = session.getParameter(_tmKey);
             if (tm == null || tm.length() == 0 || getTimeStampKey().equals(tm)) {
                 sts = true;     // tmパラメータが存在しない時もOKとする
             }
@@ -1545,9 +1549,10 @@ if (debugSearch) System.out.println("◆execute("+start+","+size+")◆");
                             }
                             int hash = CharArray.getInt(session.getParameter("page@hash")); // InputModuleからのみセットされている
 
-                            String tm = session.getParameter(tmKey);
+                            String _tmKey = (page != null) ? page.getTmKey() : tmKey;
+                            String tm = session.getParameter(_tmKey);
                             if (hash > 0 && hash == _hash) {
-                                String _tm = session.getParameter(_hash+"_"+tmKey);
+                                String _tm = session.getParameter(_hash+"_"+_tmKey);
                                 tm = _tm;
                                 if (tm.length() ==0) {
                                     tm=getTimeStampKey();
