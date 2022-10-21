@@ -44,7 +44,7 @@ public class DataAccessObject {
     
     private boolean debugSQL = (SystemConst.debug && true);
     private boolean debugSession = (SystemConst.debug && false);
-    private boolean debugCache = (SystemConst.debug && false);
+    private boolean debugCache = (SystemConst.debug && false);   // false
     private boolean debugSystemLock = (SystemConst.debug && false);
     private boolean debugSearch = (SystemConst.debug && false);  // false
 

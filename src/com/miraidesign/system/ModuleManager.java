@@ -43,7 +43,7 @@ import com.miraidesign.util.Util;
 public class ModuleManager {
     static private boolean debug = (SystemConst.debug && true);  // デバッグ表示
     static private boolean debug2 = (SystemConst.debug && false);  // デバッグ表示
-    static private boolean debugInfo = (SystemConst.debug && false);  // デバッグ表示
+    static private boolean debugInfo = (SystemConst.debug && true);  // デバッグ表示 false
     static private boolean debugIP = (SystemConst.debug && false);  // デバッグ表示
     static private boolean debugMailTemplate = (SystemConst.debug && false);  // デバッグ表示
 
@@ -1071,7 +1071,7 @@ if (debugInfo) System.out.println("▼setHashItemInfo:start---------------------
                             if (ckey != null && ckey.trim().length() > 0) {
                                 hashItemInfo.put(ckey.toString(), info);
                             } else {
-                                if (debugInfo) System.out.println("setItemInfo keyが取得できない :"+ckey);
+                                //if (debugInfo) System.out.println("setItemInfo keyが取得できない :"+ckey);
                             }
                             pos = newpos+1;
                         }
